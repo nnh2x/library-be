@@ -1,2 +1,2 @@
-export * from './base.entity'
-export * from './Book-in-library.entity'
+export * from "./base.entity";
+export * from "./Book-in-library.entity";
