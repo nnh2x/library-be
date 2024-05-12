@@ -1,5 +1,8 @@
-import { IsString, IsOptional } from 'class-validator';
-
+import { IsString, IsOptional, IsEnum, IsArray } from "class-validator";
+export enum SortOrder {
+  ASC = "ASC",
+  DESC = "DESC",
+}
 export class SearchBookQuery {
   @IsString()
   @IsOptional()
@@ -9,7 +12,20 @@ export class SearchBookQuery {
   @IsOptional()
   author?: string;
 
-  @IsString()
+  @IsArray()
   @IsOptional()
-  category?: string;
+  category_ids: string[];
+
+  page_index: number;
+
+  page_size: number;
+
+  @IsOptional()
+  public orderBy?: string;
+
+  @IsEnum(SortOrder)
+  @IsOptional()
+  public sortOrder?: SortOrder = SortOrder.DESC;
+
+  // Brrows ASC DESC
 }

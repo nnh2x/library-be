@@ -1,0 +1,11 @@
+1. naming
+
+2. swagger là gì
+
+3. restful api => sua het api lai
+
+4. refactor service, null, else, emty array
+
+5. sua api search
+
+6. authen???
