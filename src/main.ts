@@ -3,11 +3,16 @@ import { AppModule } from "./app.module";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 async function bootstrap() {
   const port: number = 5200;
-
+  await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    transport: Transport.REDIS,
+    options: {
+      host: process.env.REDIS_HOST,
+      port: +process.env.REDIS_PORT,
+    },
+  });
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
     logger: ["error", "warn"],

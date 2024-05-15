@@ -13,7 +13,6 @@ export class UsersService {
 
   async createUser(createUser: CreateUserDto): Promise<User> {
     const { name, password } = createUser;
-    console.log("createUser", createUser);
     const newUser = this.userRepository.create({
       name,
       password,

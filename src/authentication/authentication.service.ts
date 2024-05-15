@@ -11,21 +11,33 @@ export class AuthenticationService {
   ) {}
   async validateUser(login: Login): Promise<any> {
     const user = await this.usersService.getUser(login.name);
-    if (!user) return null;
-    const passwordValid = await bcrypt.compare(login.password, user.password);
     if (!user) {
       throw new NotAcceptableException("could not find the user");
     }
+    const passwordValid = await bcrypt.compare(login.password, user.password);
     if (user && passwordValid) {
       return user;
     }
     return null;
   }
-  async login(user: Login) {
-    console.log(user);
-    const payload = { name: user.name, sub: user.password };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login(user: Login): Promise<any> {
+    const userLogin = await this.usersService.getUser(user.name);
+    if (!userLogin) {
+      throw new NotAcceptableException("could not find the user");
+    }
+    const passwordValid = await bcrypt.compare(
+      user.password,
+      userLogin.password,
+    );
+    if (userLogin && passwordValid) {
+      const payload = { name: userLogin.name, sub: userLogin.password };
+      const saltOrRounds = 10;
+      return {
+        ...userLogin,
+        password: await bcrypt.hash(userLogin.password, saltOrRounds),
+        access_token: await this.jwtService.signAsync(payload),
+      };
+    }
+    return null;
   }
 }
